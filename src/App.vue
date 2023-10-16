@@ -1,5 +1,25 @@
 <script setup>
-import { RouterLink } from 'vue-router'
+import { computed } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
+
+const route = useRoute()
+
+const links = computed(() =>
+  [
+    {
+      label: 'Home',
+      name: 'home'
+    },
+    {
+      label: 'Documentation',
+      name: 'documentation'
+    },
+    {
+      label: 'Contact',
+      name: 'contact'
+    }
+  ].map(({ name, label }) => ({ name, label, active: name == route.name }))
+)
 </script>
 
 <template>
@@ -7,14 +27,14 @@ import { RouterLink } from 'vue-router'
     class="d-flex justify-content-center py-3 border-bottom sticky-top bg-light bg-opacity-75"
   >
     <ul class="nav nav-pills">
-      <li class="nav-item">
-        <router-link to="/" class="nav-link active" aria-current="page">Home</router-link>
-      </li>
-      <li class="nav-item">
-        <router-link to="/documentation" class="nav-link">Documentation</router-link>
-      </li>
-      <li class="nav-item">
-        <router-link to="/contact" class="nav-link">Contact</router-link>
+      <li v-for="{ name, label, active } in links" :key="name" class="nav-item">
+        <router-link
+          :to="{ name }"
+          class="nav-link"
+          :class="{ active: active }"
+          :aria-current="active"
+          >{{ label }}</router-link
+        >
       </li>
     </ul>
   </header>

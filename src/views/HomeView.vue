@@ -20,13 +20,13 @@ const recurrency = reactive({
   count: null,
   until: null,
   by: {
-    seconds: null, // Array<Integer>
-    minutes: null, // Array<Integer>
-    hours: null, // Array<Integer>
-    days: null, // Array<(MO,TU,WE,TH,FR,SA,SU)>
-    monthDays: null, // Array<Integer>
-    months: null, // Array<Integer>
-    setPos: null
+    seconds: [], // Array<Integer>
+    minutes: [], // Array<Integer>
+    hours: [], // Array<Integer>
+    days: [], // Array<(MO,TU,WE,TH,FR,SA,SU)>
+    monthDays: [], // Array<Integer>
+    months: [], // Array<Integer>
+    setPos: []
   },
   weekStart: null, // (SU|MO)
   recurDates: null, // Array
@@ -43,7 +43,7 @@ const recurrency = reactive({
           <input type="date" v-model="recurrency.start" id="start" class="form-control" />
         </div>
         <div class="col">
-          <div class="row row-cols-3 g-3">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             <div class="col">
               <label for="start-time" class="form-label fw-bold">Start Time</label>
               <input
@@ -173,7 +173,13 @@ const recurrency = reactive({
 
         <div class="col">
           <label for="by-months" class="form-label fw-bold">Months</label>
-          <select v-model="recurrency.by.months" id="by-months" class="form-select" size="5" multiple>
+          <select
+            v-model="recurrency.by.months"
+            id="by-months"
+            class="form-select"
+            size="5"
+            multiple
+          >
             <option :value="null" disabled>--Select--</option>
             <option v-for="option in months" :key="option.value" :value="option.value">
               {{ option.name }}
