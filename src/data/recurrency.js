@@ -1,4 +1,21 @@
-export const frequencyOptions = ['Daily', 'Weekly', 'Monthly', 'Yearly']
+export const frequencyOptions = [
+  {
+    value: 'Daily',
+    time: 'day'
+  },
+  {
+    value: 'Weekly',
+    time: 'week'
+  },
+  {
+    value: 'Monthly',
+    time: 'month'
+  },
+  {
+    value: 'Yearly',
+    time: 'year'
+  }
+]
 
 export const weekDays = [
   {
@@ -120,3 +137,18 @@ export const minutesOptions = oneThroughWhat(60)
 export const hoursOptions = oneThroughWhat(24)
 
 export const monthDayOptions = oneThroughWhat(31)
+
+export const endOptions = [
+  {
+    label: 'Never',
+    value: 'Never'
+  },
+  {
+    label: 'Until',
+    value: 'Until'
+  },
+  {
+    label: 'After Occurrences',
+    value: 'Count'
+  }
+]
