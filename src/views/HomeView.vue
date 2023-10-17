@@ -1,6 +1,7 @@
 <script setup>
 import { computed, reactive } from 'vue'
 import { frequencyOptions, weekDays, months, monthDayOptions, endOptions } from '@/data/recurrency'
+import AppCombobox from '@/components/AppCombobox.vue'
 
 import useDatetime from '@/composables/datetime'
 import pluralize from 'pluralize'
@@ -77,44 +78,21 @@ const endTypeCount = computed(() => recurrency.endType === 'Count')
 
         <div v-if="recurringWeekly" class="col">
           <label for="by-days" class="form-label fw-bold">Days</label>
-          <select v-model="recurrency.by.days" id="by-days" class="form-select" size="5" multiple>
-            <option :value="null" disabled>--Select--</option>
-            <option v-for="option in weekDays" :key="option.value" :value="option.value">
-              {{ option.name }}
-            </option>
-          </select>
+          <app-combobox id="by-days" v-model="recurrency.by.days" :options="weekDays" />
         </div>
 
-        <div v-if="recurringMonthly" class="col">
+        <div v-if="recurringMonthly || recurringYearly" class="col">
           <label for="by-month-days" class="form-label fw-bold">Month Days</label>
-          <select
-            v-model="recurrency.by.monthDays"
+          <app-combobox
             id="by-month-days"
-            class="form-select"
-            size="5"
-            multiple
-          >
-            <option :value="null" disabled>--Select--</option>
-            <option v-for="option in monthDayOptions" :key="option" :value="option">
-              {{ option }}
-            </option>
-          </select>
+            v-model="recurrency.by.monthDays"
+            :options="monthDayOptions"
+          />
         </div>
 
         <div v-if="recurringYearly" class="col">
           <label for="by-months" class="form-label fw-bold">Months</label>
-          <select
-            v-model="recurrency.by.months"
-            id="by-months"
-            class="form-select"
-            size="5"
-            multiple
-          >
-            <option :value="null" disabled>--Select--</option>
-            <option v-for="option in months" :key="option.value" :value="option.value">
-              {{ option.name }}
-            </option>
-          </select>
+          <app-combobox id="by-months" v-model="recurrency.by.months" :options="months" />
         </div>
 
         <fieldset class="col">

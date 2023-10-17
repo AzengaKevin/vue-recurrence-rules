@@ -20,37 +20,37 @@ export const frequencyOptions = [
 export const weekDays = [
   {
     iteration: 1,
-    name: 'Sunday',
+    label: 'Sunday',
     value: 'SU'
   },
   {
     iteration: 2,
-    name: 'Monday',
+    label: 'Monday',
     value: 'SU'
   },
   {
     iteration: 3,
-    name: 'Tuesday',
+    label: 'Tuesday',
     value: 'TU'
   },
   {
     iteration: 4,
-    name: 'Wednesday',
+    label: 'Wednesday',
     value: 'WE'
   },
   {
     iteration: 5,
-    name: 'Thursday',
+    label: 'Thursday',
     value: 'TH'
   },
   {
     iteration: 6,
-    name: 'Friday',
+    label: 'Friday',
     value: 'FR'
   },
   {
     iteration: 7,
-    name: 'Saturday',
+    label: 'Saturday',
     value: 'SA'
   }
 ]
@@ -60,62 +60,62 @@ export const weekStartOptions = weekDays.filter((d) => ['SU', 'MO'].includes(d.v
 export const months = [
   {
     iteration: 1,
-    name: 'January',
+    label: 'January',
     value: 'JAN'
   },
   {
     iteration: 2,
-    name: 'February',
+    label: 'February',
     value: 'FEB'
   },
   {
     iteration: 3,
-    name: 'March',
+    label: 'March',
     value: 'MAR'
   },
   {
     iteration: 4,
-    name: 'April',
+    label: 'April',
     value: 'APR'
   },
   {
     iteration: 5,
-    name: 'May',
+    label: 'May',
     value: 'MAY'
   },
   {
     iteration: 6,
-    name: 'June',
+    label: 'June',
     value: 'JUN'
   },
   {
     iteration: 7,
-    name: 'July',
+    label: 'July',
     value: 'JUL'
   },
   {
     iteration: 8,
-    name: 'Augast',
+    label: 'Augast',
     value: 'AUG'
   },
   {
     iteration: 9,
-    name: 'September',
+    label: 'September',
     value: 'SEP'
   },
   {
     iteration: 10,
-    name: 'October',
+    label: 'October',
     value: 'OCT'
   },
   {
     iteration: 11,
-    name: 'November',
+    label: 'November',
     value: 'NOV'
   },
   {
     iteration: 12,
-    name: 'December',
+    label: 'December',
     value: 'DEC'
   }
 ]
@@ -124,7 +124,10 @@ const oneThroughWhat = (what) => {
   const elements = []
 
   for (let count = 1; count <= what; count++) {
-    elements.push(count)
+    elements.push({
+      label: `${count}`,
+      value: count
+    })
   }
 
   return elements
