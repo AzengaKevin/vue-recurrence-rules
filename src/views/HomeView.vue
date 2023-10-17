@@ -6,16 +6,16 @@ import AppCombobox from '@/components/AppCombobox.vue'
 import useDatetime from '@/composables/datetime'
 import pluralize from 'pluralize'
 
-const { getDatetimeLocal } = useDatetime()
+const { datetimeLocal, day, monthDay, month } = useDatetime()
 
 const recurrency = reactive({
-  start: getDatetimeLocal(),
+  start: datetimeLocal,
   frequency: null,
   interval: 1,
   by: {
-    days: [],
-    monthDays: [],
-    months: [],
+    days: [weekDays.find((_, index) => index === day.value)],
+    monthDays: [monthDayOptions.find((o) => o.value === monthDay.value)],
+    months: [months.find((_, index) => index === month.value)],
     setPos: []
   },
   recurDates: null,

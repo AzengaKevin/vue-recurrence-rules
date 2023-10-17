@@ -27,7 +27,7 @@ const isLoading = ref(false)
 
 let query = ref('')
 
-const selectedOptions = ref([])
+const selectedOptions = ref(props.modelValue)
 
 const setSelectedOptions = (value) => {
   if (!selectedOptions.value.find((o) => o.value === value.value)) {

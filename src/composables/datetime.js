@@ -1,11 +1,19 @@
 import moment from 'moment-timezone'
+import { ref } from 'vue'
 
 export default function useDatetime() {
-  const getDatetimeLocal = () => {
-    return moment().format('YYYY-MM-DDTHH:mm')
-  }
+  const day = ref(moment().day())
+
+  const monthDay = ref(moment().date())
+
+  const month = ref(moment().month())
+
+  const datetimeLocal = ref(moment().format('YYYY-MM-DDTHH:mm'))
 
   return {
-    getDatetimeLocal
+    datetimeLocal,
+    monthDay,
+    month,
+    day
   }
 }
