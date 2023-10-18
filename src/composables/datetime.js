@@ -10,7 +10,18 @@ export default function useDatetime() {
 
   const datetimeLocal = ref(moment().format('YYYY-MM-DDTHH:mm'))
 
+  const convertToISO8601 = (dateString) => {
+    const parsedDate = moment(dateString)
+
+    // Format the date in ISO 8601 format
+    const iso8601Date = parsedDate.format('YYYYMMDDTHHMMSS')
+
+    // Append the 'Z' designator for UTC
+    return iso8601Date + 'Z'
+  }
+
   return {
+    convertToISO8601,
     datetimeLocal,
     monthDay,
     month,

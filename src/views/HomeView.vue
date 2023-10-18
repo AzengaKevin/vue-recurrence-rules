@@ -1,30 +1,40 @@
 <script setup>
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { frequencyOptions, weekDays, months, monthDayOptions, endOptions } from '@/data/recurrency'
 import AppCombobox from '@/components/AppCombobox.vue'
 
 import useDatetime from '@/composables/datetime'
 import pluralize from 'pluralize'
 
-const { datetimeLocal, day, monthDay, month } = useDatetime()
+const { datetimeLocal, day, monthDay, month, convertToISO8601 } = useDatetime()
 
 const recurrency = reactive({
-  start: datetimeLocal,
   frequency: null,
   interval: 1,
   by: {
     days: [weekDays.find((_, index) => index === day.value)],
     monthDays: [monthDayOptions.find((o) => o.value === monthDay.value)],
-    months: [months.find((_, index) => index === month.value)],
-    setPos: []
+    months: [months.find((_, index) => index === month.value)]
   },
-  recurDates: null,
-  excludeDate: null,
-  timeZoneIdentifier: null,
-  endType: 'Never',
   until: null,
   count: null
 })
+
+const endType = ref('Never')
+
+const start = ref(datetimeLocal)
+
+watch(
+  endType,
+  (oldValue, newValue) => {
+    if (oldValue !== newValue) {
+      recurrency.count = null
+
+      recurrency.until = null
+    }
+  },
+  { deep: true }
+)
 
 const intervalTime = computed(() => {
   const localIntervalTime = frequencyOptions.find((option) => option.value === recurrency.frequency)
@@ -38,17 +48,86 @@ const recurringMonthly = computed(() => recurrency.frequency === 'Monthly')
 
 const recurringYearly = computed(() => recurrency.frequency === 'Yearly')
 
-const endTypeUntil = computed(() => recurrency.endType === 'Until')
+const endTypeUntil = computed(() => endType.value === 'Until')
 
-const endTypeCount = computed(() => recurrency.endType === 'Count')
+const endTypeCount = computed(() => endType.value === 'Count')
+
+const theRule = computed(() => {
+  if (!recurrency.frequency) return null
+
+  const parts = []
+
+  switch (recurrency.frequency) {
+    case 'Daily':
+      if (recurrency.frequency) parts.push(`FREQ=${recurrency.frequency}`)
+
+      if (recurrency.interval) parts.push(`INTERVAL=${recurrency.interval}`)
+
+      if (recurrency.count) parts.push(`COUNT=${recurrency.count}`)
+
+      if (recurrency.until) parts.push(`UNTIL=${convertToISO8601(recurrency.until)}`)
+
+      break
+
+    case 'Weekly':
+      if (recurrency.frequency) parts.push(`FREQ=${recurrency.frequency}`)
+
+      if (recurrency.interval) parts.push(`INTERVAL=${recurrency.interval}`)
+
+      if (recurrency.by.days)
+        parts.push(`BYDAY=${recurrency.by.days.map((o) => o.value).join(',')}`)
+
+      if (recurrency.count) parts.push(`COUNT=${recurrency.count}`)
+
+      if (recurrency.until) parts.push(`UNTIL=${convertToISO8601(recurrency.until)}`)
+
+      break
+
+    case 'Monthly':
+      if (recurrency.frequency) parts.push(`FREQ=${recurrency.frequency}`)
+
+      if (recurrency.interval) parts.push(`INTERVAL=${recurrency.interval}`)
+
+      if (recurrency.by.monthDays)
+        parts.push(`BYMONTHDAY=${recurrency.by.monthDays.map((o) => o.value).join(',')}`)
+
+      if (recurrency.count) parts.push(`COUNT=${recurrency.count}`)
+
+      if (recurrency.until) parts.push(`UNTIL=${convertToISO8601(recurrency.until)}`)
+
+      break
+
+    case 'Yearly':
+      if (recurrency.frequency) parts.push(`FREQ=${recurrency.frequency}`)
+
+      if (recurrency.interval) parts.push(`INTERVAL=${recurrency.interval}`)
+
+      if (recurrency.by.months)
+        parts.push(`BYMONTH=${recurrency.by.months.map((o) => o.iteration).join(',')}`)
+
+      if (recurrency.count) parts.push(`COUNT=${recurrency.count}`)
+
+      if (recurrency.until) parts.push(`UNTIL=${convertToISO8601(recurrency.until)}`)
+
+      break
+
+    default:
+      break
+  }
+
+  return parts.join(';')
+})
 </script>
 <template>
   <main>
     <div class="container py-4">
       <div class="row row-cols-1 g-3">
         <div class="col">
+          <output class="fw-bold">{{ theRule }}</output>
+        </div>
+        <div class="col">
           <label for="start" class="form-label fw-bold">Start</label>
-          <input type="datetime-local" v-model="recurrency.start" id="start" class="form-control" />
+          <input type="datetime-local" v-model="start" id="start" class="form-control" />
         </div>
 
         <div class="col">
@@ -105,7 +184,7 @@ const endTypeCount = computed(() => recurrency.endType === 'Count')
                     <input
                       type="radio"
                       name="end"
-                      v-model="recurrency.endType"
+                      v-model="endType"
                       :id="`end${option.value}-option`"
                       :value="option.value"
                       class="form-check-input"
